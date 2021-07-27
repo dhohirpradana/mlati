@@ -29,11 +29,6 @@ class Penduduk extends Model
         return $this->belongsTo('App\Darah');
     }
 
-    public function detailDusun()
-    {
-        return $this->belongsTo('App\DetailDusun');
-    }
-
     public function statusHubunganDalamKeluarga()
     {
         return $this->belongsTo('App\StatusHubunganDalamKeluarga');

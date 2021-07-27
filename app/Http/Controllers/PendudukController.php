@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Agama;
 use App\Darah;
-use App\DetailDusun;
-use App\Dusun;
 use App\Http\Requests\PendudukRequest;
 use App\Pekerjaan;
 use App\Pendidikan;

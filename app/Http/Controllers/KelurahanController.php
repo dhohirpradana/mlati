@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
-class DesaController extends Controller
+class KelurahanController extends Controller
 {
     /**
      * Display a listing of the resource.

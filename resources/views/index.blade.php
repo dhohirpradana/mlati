@@ -156,7 +156,7 @@
             @endif
         </section>
     @endif
-    @if ($pemerintahan_desa->count() > 0)
+    @if ($pemerintahan_kelurahan->count() > 0)
         <section class="mb-5">
             <div class="row">
                 <div class="col-md">
@@ -174,18 +174,18 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                @foreach ($pemerintahan_desa as $item)
+                @foreach ($pemerintahan_kelurahan as $item)
                     <div class="col-lg-4 col-md-6 mb-3">
                         <div class="card animate-up shadow">
                             <a
-                                href="{{ route('pemerintahan-kelurahan.show', ['pemerintahan_desa' => $item, 'slug' => Str::slug($item->judul)]) }}">
+                                href="{{ route('pemerintahan-kelurahan.show', ['pemerintahan_kelurahan' => $item, 'slug' => Str::slug($item->judul)]) }}">
                                 <div class="card-img"
                                     style="background-image: url('{{ $item->gambar ? url(Storage::url($item->gambar)) : url(Storage::url('noimage.jpg')) }}'); background-size: cover; height: 200px;">
                                 </div>
                             </a>
                             <div class="card-body text-center">
                                 <a
-                                    href="{{ route('pemerintahan-kelurahan.show', ['pemerintahan_desa' => $item, 'slug' => Str::slug($item->judul)]) }}">
+                                    href="{{ route('pemerintahan-kelurahan.show', ['pemerintahan_kelurahan' => $item, 'slug' => Str::slug($item->judul)]) }}">
                                     <h3>{{ $item->judul }}</h3>
                                     <div class="mt-3 d-flex justify-content-between text-sm text-muted">
                                         <i class="fas fa-clock"> {{ $item->created_at->diffForHumans() }}</i>
@@ -197,7 +197,7 @@
                     </div>
                 @endforeach
             </div>
-            @if (App\PemerintahanDesa::count() > 3)
+            @if (App\PemerintahanKelurahan::count() > 3)
                 <div class="text-center">
                     <a href="{{ route('pemerintahan-kelurahan') }}" class="btn btn-primary">Lebih Banyak Informasi
                         Pemerintahan Kelurahan</a>

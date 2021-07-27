@@ -20,9 +20,6 @@
             <th><b>Nama Ayah</b></th>
             <th><b>NIK Ibu</b></th>
             <th><b>Nama Ibu</b></th>
-            <th><b>Dusun</b></th>
-            <th><b>RW</b></th>
-            <th><b>RT</b></th>
             <th><b>Alamat</b></th>
         </tr>
     </thead>

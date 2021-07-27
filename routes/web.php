@@ -17,11 +17,11 @@ Route::get('/', 'HomeController@index')->name('home.index');
 
 Route::get('/laporan-apbdes', 'AnggaranRealisasiController@laporan_apbdes')->name('laporan-apbdes');
 Route::get('/layanan-surat', 'SuratController@layanan_surat')->name('layanan-surat');
-Route::get('/pemerintahan-kelurahan', 'PemerintahanDesaController@pemerintahan_desa')->name('pemerintahan-kelurahan');
-Route::get('/pemerintahan-kelurahan/{pemerintahan_desa}', function () {
+Route::get('/pemerintahan-kelurahan', 'PemerintahanKelurahanController@pemerintahan_kelurahan')->name('pemerintahan-kelurahan');
+Route::get('/pemerintahan-kelurahan/{pemerintahan_kelurahan}', function () {
     return abort(404);
 });
-Route::get('/pemerintahan-kelurahan/{pemerintahan_desa}/{slug}', 'PemerintahanDesaController@show')->name('pemerintahan-kelurahan.show');
+Route::get('/pemerintahan-kelurahan/{pemerintahan_kelurahan}/{slug}', 'PemerintahanKelurahanController@show')->name('pemerintahan-kelurahan.show');
 Route::get('/berita', 'BeritaController@berita')->name('berita');
 Route::get('/berita/{berita}/{slug}', 'BeritaController@show')->name('berita.show');
 Route::get('/berita/{berita}', function () {
@@ -47,17 +47,17 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::patch('/update-pengaturan/{user}', 'UserController@updatePengaturan')->name('update-pengaturan');
     Route::patch('/update-profil/{user}', 'UserController@updateProfil')->name('update-profil');
 
-    Route::get('/profil-kelurahan', 'DesaController@index')->name('profil-kelurahan');
-    Route::patch('/update-kelurahan/{kelurahan}', 'DesaController@update')->name('update-kelurahan');
+    Route::get('/profil-kelurahan', 'KelurahanController@index')->name('profil-kelurahan');
+    Route::patch('/update-kelurahan/{kelurahan}', 'KelurahanController@update')->name('update-kelurahan');
 
     Route::get('/tambah-surat', 'SuratController@create')->name('surat.create');
     Route::resource('/cetakSurat', 'CetakSuratController')->except('create', 'store', 'index');
     Route::resource('/surat', 'SuratController')->except('create');
 
-    Route::get('/kelola-pemerintahan-kelurahan', 'PemerintahanDesaController@index')->name('pemerintahan-kelurahan.index');
-    Route::get('/tambah-pemerintahan-kelurahan', 'PemerintahanDesaController@create')->name('pemerintahan-kelurahan.create');
-    Route::get('/edit-pemerintahan-kelurahan/{pemerintahan_desa}', 'PemerintahanDesaController@edit')->name('pemerintahan-kelurahan.edit');
-    Route::resource('/pemerintahan-kelurahan', 'PemerintahanDesaController')->except('create', 'show', 'index', 'edit');
+    Route::get('/kelola-pemerintahan-kelurahan', 'PemerintahanKelurahanController@index')->name('pemerintahan-kelurahan.index');
+    Route::get('/tambah-pemerintahan-kelurahan', 'PemerintahanKelurahanController@create')->name('pemerintahan-kelurahan.create');
+    Route::get('/edit-pemerintahan-kelurahan/{pemerintahan_kelurahan}', 'PemerintahanKelurahanController@edit')->name('pemerintahan-kelurahan.edit');
+    Route::resource('/pemerintahan-kelurahan', 'PemerintahanKelurahanController')->except('create', 'show', 'index', 'edit');
 
     Route::get('/kelola-berita', 'BeritaController@index')->name('berita.index');
     Route::get('/tambah-berita', 'BeritaController@create')->name('berita.create');

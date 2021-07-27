@@ -53,16 +53,17 @@
                     <h3 class="mb-0">Edit Informasi Kelurahan</h3>
                 </div>
                 <div class="card-body">
-                    <form autocomplete="off" action="{{ route('pemerintahan-kelurahan.update', $pemerintahan_desa) }}"
-                        method="post" enctype="multipart/form-data">
+                    <form autocomplete="off"
+                        action="{{ route('pemerintahan-kelurahan.update', $pemerintahan_kelurahan) }}" method="post"
+                        enctype="multipart/form-data">
                         @csrf @method('patch')
                         <div class="form-group">
                             <label class="form-control-label">Gambar</label>
                             <div class="text-center">
                                 <img title="Klik untuk ganti gambar" onclick="$(this).siblings('.images').click()"
                                     class="mw-100 upload-image" style="max-height: 300px"
-                                    src="{{ $pemerintahan_desa->gambar ? asset(Storage::url($pemerintahan_desa->gambar)) : asset('storage/upload.jpg') }}"
-                                    alt="Gambar berita {{ $pemerintahan_desa->judul }}">
+                                    src="{{ $pemerintahan_kelurahan->gambar ? asset(Storage::url($pemerintahan_kelurahan->gambar)) : asset('storage/upload.jpg') }}"
+                                    alt="Gambar berita {{ $pemerintahan_kelurahan->judul }}">
                                 <input accept="image/*" onchange="uploadImage(this)" type="file" name="gambar"
                                     class="images" style="display: none">
                             </div>
@@ -70,14 +71,15 @@
                         <div class="form-group">
                             <label class="form-control-label">Judul</label>
                             <input class="form-control @error('judul') is-invalid @enderror" name="judul"
-                                placeholder="Masukkan Judul ..." value="{{ old('judul', $pemerintahan_desa->judul) }}">
+                                placeholder="Masukkan Judul ..."
+                                value="{{ old('judul', $pemerintahan_kelurahan->judul) }}">
                             @error('judul') <span class="invalid-feedback font-weight-bold">{{ $message }}</span>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label class="form-control-label">Konten</label>
                             <textarea class="form-control @error('konten') is-invalid @enderror"
-                                name="konten">{{ old('konten', $pemerintahan_desa->konten) }}</textarea>
+                                name="konten">{{ old('konten', $pemerintahan_kelurahan->konten) }}</textarea>
                             @error('konten') <span class="invalid-feedback font-weight-bold">{{ $message }}</span>
                             @enderror
                         </div>

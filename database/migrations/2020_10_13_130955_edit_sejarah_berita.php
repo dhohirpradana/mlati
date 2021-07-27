@@ -13,9 +13,9 @@ class EditSejarahBerita extends Migration
      */
     public function up()
     {
-        Schema::rename('sejarah', 'pemerintahan_desa');
+        Schema::rename('sejarah', 'pemerintahan_kelurahan');
 
-        Schema::table('pemerintahan_desa', function (Blueprint $table) {
+        Schema::table('pemerintahan_kelurahan', function (Blueprint $table) {
             $table->bigInteger('dilihat')->default(0)->after('konten');
         });
 
@@ -35,10 +35,10 @@ class EditSejarahBerita extends Migration
             $table->dropColumn('dilihat');
         });
 
-        Schema::table('pemerintahan_desa', function (Blueprint $table) {
+        Schema::table('pemerintahan_kelurahan', function (Blueprint $table) {
             $table->dropColumn('dilihat');
         });
 
-        Schema::rename('pemerintahan_desa', 'sejarah');
+        Schema::rename('pemerintahan_kelurahan', 'sejarah');
     }
 }

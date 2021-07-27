@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class PemerintahanDesaSeeder extends Seeder
+class PemerintahanKelurahanSeeder extends Seeder
 {
     /**
      * Run the database seeds.

@@ -1,9 +1,9 @@
 @extends('layouts.layout')
-@section('title', 'Kelurahan ' . $kelurahan->nama_kelurahan . ' - Kelurahan ' . $pemerintahan_desa->judul)
+@section('title', 'Kelurahan ' . $kelurahan->nama_kelurahan . ' - Kelurahan ' . $pemerintahan_kelurahan->judul)
 
 @section('styles')
     <meta name="description"
-        content="{{ $pemerintahan_desa->judul }} Kelurahan {{ $kelurahan->nama_kelurahan }}, Kecamatan {{ $kelurahan->nama_kecamatan }}, Kabupaten {{ $kelurahan->nama_kabupaten }}.">
+        content="{{ $pemerintahan_kelurahan->judul }} Kelurahan {{ $kelurahan->nama_kelurahan }}, Kecamatan {{ $kelurahan->nama_kecamatan }}, Kabupaten {{ $kelurahan->nama_kabupaten }}.">
 
     <style>
         .animate-up:hover {
@@ -14,34 +14,34 @@
 @endsection
 
 @section('header')
-    <h2 class="text-white text-sm text-muted">PEMERINTAHAN DESA</h2>
-    <h1 class="text-white">{{ $pemerintahan_desa->judul }}</h2>
+    <h2 class="text-white text-sm text-muted">PEMERINTAHAN Kelurahan</h2>
+    <h1 class="text-white">{{ $pemerintahan_kelurahan->judul }}</h2>
     @endsection
 
     @section('content')
-        @if ($pemerintahan_desa->gambar)
+        @if ($pemerintahan_kelurahan->gambar)
             <div class="row mb-5">
                 <div class="col-md text-center">
-                    <img class="mw-100" src="{{ url(Storage::url($pemerintahan_desa->gambar)) }}"
-                        alt="Gambar Informasi Kelurahan {{ $pemerintahan_desa->judul }}">
+                    <img class="mw-100" src="{{ url(Storage::url($pemerintahan_kelurahan->gambar)) }}"
+                        alt="Gambar Informasi Kelurahan {{ $pemerintahan_kelurahan->judul }}">
                 </div>
             </div>
         @endif
         <div class="card">
             <div class="card-body">
-                {!! $pemerintahan_desa->konten !!}
+                {!! $pemerintahan_kelurahan->konten !!}
             </div>
         </div>
 
-        @if ($pemerintahan_desas->count() > 2)
+        @if ($pemerintahan_kelurahans->count() > 2)
             <h2 class="text-lead text-white text-center mt-5">Informasi Kelurahan Lainnya</h2>
             <div class="row justify-content-center mt-3">
-                @foreach ($pemerintahan_desas as $item)
+                @foreach ($pemerintahan_kelurahans as $item)
                     <div class="col-lg-4 col-md-6 mb-3">
                         <div class="card animate-up">
                             @if ($item->gambar)
                                 <a
-                                    href="{{ route('pemerintahan-kelurahan.show', ['pemerintahan_desa' => $item, 'slug' => Str::slug($item->judul)]) }}">
+                                    href="{{ route('pemerintahan-kelurahan.show', ['pemerintahan_kelurahan' => $item, 'slug' => Str::slug($item->judul)]) }}">
                                     <div class="card-img"
                                         style="background-image: url('{{ url(Storage::url($item->gambar)) }}'); background-size: cover; height: 200px;">
                                     </div>
@@ -49,7 +49,7 @@
                             @endif
                             <div class="card-body text-center">
                                 <a
-                                    href="{{ route('pemerintahan-kelurahan.show', ['pemerintahan_desa' => $item, 'slug' => Str::slug($item->judul)]) }}">
+                                    href="{{ route('pemerintahan-kelurahan.show', ['pemerintahan_kelurahan' => $item, 'slug' => Str::slug($item->judul)]) }}">
                                     <h3>{{ $item->judul }}</h3>
                                     <p class="text-sm text-muted"><i class="fas fa-clock-o"></i>
                                         {{ $item->created_at->diffForHumans() }}</p>

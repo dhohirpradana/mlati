@@ -41,7 +41,7 @@ Gotong Royong',
     'Pelaksanaan Pembangunan',
     'Pembinaan kemasyarakatan',
     'Pemberdayaan Masyarakat',
-    'Penanggulangan Bencana, Darurat dan Mendesak',
+    'Penanggulangan Bencana, Darurat dan MenKelurahank',
     // Pembiayaan
     'SILPA Tahun Sebelumnya',
     'Pencairan Dana Cadangan',

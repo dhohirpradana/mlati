@@ -38,8 +38,6 @@ class CreatePendudukTable extends Migration
             $table->string('nama_ayah', 64);
             $table->string('nama_ibu', 64);
             $table->string('alamat');
-            $table->unsignedBigInteger('detail_dusun_id')->nullable();
-            $table->foreign('detail_dusun_id')->references('id')->on('detail_dusun')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }
