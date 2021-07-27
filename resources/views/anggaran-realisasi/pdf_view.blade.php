@@ -73,7 +73,7 @@ $nc = 0;
 ?>
 <div class="container">
     <div class="d-flex p-2 justify-content-center"">
-        <h3>Realisasi APBDesa Tahun Anggaran {{ $tahun }}</h3>
+        <h3>Realisasi APBD Tahun Anggaran {{ $tahun }}</h3>
     </div>
     <div class=" row">
         <table class="table table-bordered" style="width:100%">
