@@ -89,7 +89,7 @@ $('form').on('submit', function(event) {
     });
 });
 
-$("#perihal").change(function(){
+$("#tampilkan_perihal").change(function(){
     if ($(this).prop('checked') == true) {
         $("#isian").prepend(`
             <div id="isian_perihal">

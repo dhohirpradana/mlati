@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CetakSurat;
-use App\Kelurahan;
+use App\Desa;
 use App\IsiSurat;
 use App\Surat;
 use Illuminate\Support\Facades\Validator;
@@ -30,8 +30,8 @@ class SuratController extends Controller
     public function layanan_surat()
     {
         $surat = Surat::latest()->get();
-        $kelurahan = Kelurahan::find(1);
-        return view('surat.layanan-surat', compact('surat', 'kelurahan'));
+        $desa = Desa::find(1);
+        return view('surat.layanan-surat', compact('surat','desa'));
     }
 
     /**
@@ -81,17 +81,17 @@ class SuratController extends Controller
      */
     public function show(Request $request, Surat $surat)
     {
-        $cetakSurat = CetakSurat::where('surat_id', $surat->id)->orderBy('id', 'desc')->paginate(25);
+        $cetakSurat = CetakSurat::where('surat_id',$surat->id)->orderBy('id', 'desc')->paginate(25);
         if ($request->cari) {
-            $cetakSurat = CetakSurat::where('surat_id', $surat->id)
-                ->whereHas('detailCetak', function ($detailCetak) use ($request) {
-                    $detailCetak->where("isian", "like", "%{$request->cari}%");
-                })
-                ->orderBy('id', 'desc')->paginate(25);
+            $cetakSurat = CetakSurat::where('surat_id',$surat->id)
+            ->whereHas('detailCetak', function ($detailCetak) use ($request) {
+                $detailCetak->where("isian", "like", "%{$request->cari}%");
+            })
+            ->orderBy('id', 'desc')->paginate(25);
         }
         $cetakSurat->appends($request->only('cari'));
 
-        return view('surat.show', compact('surat', 'cetakSurat'));
+        return view('surat.show', compact('surat','cetakSurat'));
     }
 
     /**
@@ -127,7 +127,7 @@ class SuratController extends Controller
 
         $surat->update($dataSurat);
 
-        IsiSurat::where('surat_id', $surat->id)->delete();
+        IsiSurat::where('surat_id',$surat->id)->delete();
 
         $this->createIsiSurat($request, $surat);
 
@@ -152,9 +152,9 @@ class SuratController extends Controller
     public function chartSurat(Request $request, $id)
     {
         if ($request->tahun) {
-            $cetakSurat = CetakSurat::where('surat_id', $id)->whereYear('created_at', $request->tahun)->get();
+            $cetakSurat = CetakSurat::where('surat_id',$id)->whereYear('created_at',$request->tahun)->get();
         } else {
-            $cetakSurat = CetakSurat::where('surat_id', $id)->get();
+            $cetakSurat = CetakSurat::where('surat_id',$id)->get();
         }
 
         $arr = array(
@@ -205,7 +205,7 @@ class SuratController extends Controller
             "datasets" => [[
                 "label" => "Total Cetak Surat",
                 "data" => array_values($arr),
-                "backgroundColor" => 'rgb(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ')',
+                "backgroundColor" => 'rgb(' . rand(0,255) . ',' . rand(0,255) . ',' . rand(0,255) . ')',
             ]],
         ]);
     }

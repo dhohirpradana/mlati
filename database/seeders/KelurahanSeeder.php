@@ -19,8 +19,8 @@ class KelurahanSeeder extends Seeder
             'nama_kecamatan'     => 'Kota Kudus',
             'nama_kabupaten'     => 'Kudus',
             'alamat'             => 'Mlati Norowito, No. 35, RT. 03 RW. 05, Mlati Norowito, Kec. Kota Kudus, Kabupaten Kudus, Jawa Tengah 59319',
-            'nama_lurah'   => "Nama Kades Mlati Norowito",
-            'alamat_lurah' => "Alamat Kades Mlati Norowito",
+            'nama_lurah'   => "Nama Lurah Mlati Norowito",
+            'alamat_lurah' => "Alamat Lurah Mlati Norowito",
             'logo'               => "logo.png",
         ]);
     }

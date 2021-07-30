@@ -34,6 +34,13 @@
 
 @section('content')
     @include('layouts.components.alert')
+    {{-- @include('layouts.components.flash-message') --}}
+    @if ($message = Session::get('gagal'))
+        <div class="alert alert-danger alert-block">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>{{ $message }}</strong>
+        </div>
+    @endif
     <div class="row">
         <div class="col">
             <div class="card bg-secondary shadow h-100">

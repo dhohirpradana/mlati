@@ -31,7 +31,7 @@
                     {{ Str::upper($kelurahan->nama_kabupaten) }}</span><br>
                 <span style="font-size: 14pt" class="font-weight-bold">KECAMATAN
                     {{ Str::upper($kelurahan->nama_kecamatan) }}</span><br>
-                <span style="font-size: 14pt" class="font-weight-bold">KELURAHAN
+                <span style="font-size: 14pt" class="font-weight-bold">kelurahan
                     {{ Str::upper($kelurahan->nama_kelurahan) }}</span><br>
                 <div style="font-size: 11pt; font-style: italic">
                     {{ $kelurahan->alamat }}
@@ -83,7 +83,7 @@
         @endif
 
         @php
-            $data_kades = true;
+            $data_lurah = true;
             $tabel = true;
             $i = 0;
         @endphp
@@ -94,14 +94,14 @@
                 $pattern = '/\{[0-9A-Za-z\s\(\)]+\}/';
                 preg_match_all($pattern, $string, $matches);
                 $hasil = $string;
-                
+
                 foreach ($matches[0] as $k => $value) {
                     $hasil = str_replace($value, $cetakSurat->detailCetak[$i]->isian, $hasil);
                     $i++;
                 }
-                
+
                 try {
-                    if ($surat->isiSurat[$key + 1]->jenis_isi == 3 || ($data_kades == true && $surat->data_kades == 1)) {
+                    if ($surat->isiSurat[$key + 1]->jenis_isi == 3 || ($data_lurah == true && $surat->data_lurah == 1)) {
                         if ($isiSurat->jenis_isi == 1) {
                             echo '<div class="text-justify">' . str_repeat('&nbsp;', 12) . $hasil . '</div>';
                         } elseif ($isiSurat->jenis_isi == 2) {
@@ -129,31 +129,30 @@
                 }
             @endphp
 
-            @if ($data_kades && $surat->data_kades == 1)
+            @if ($data_lurah && $surat->data_lurah == 1)
                 <table class="mb-3 ml-5">
                     <tbody>
                         <tr>
                             <td width="160px" valign="top">Nama</td>
                             <td width="10px" valign="top">:</td>
-                            <td class="text-justify" width="10cm" valign="top">{{ $kelurahan->nama_lurah }}
-                            </td>
+                            <td class="text-justify" width="10cm" valign="top">{{ $kelurahan->nama_lurah }}</td>
                         </tr>
                         <tr>
                             <td width="160px" valign="top">Jabatan</td>
                             <td width="10px" valign="top">:</td>
-                            <td class="text-justify" width="10cm" valign="top">Kepala Kelurahan</td>
+                            <td class="text-justify" width="10cm" valign="top">Kepala kelurahan</td>
                         </tr>
                         <tr>
                             <td width="160px" valign="top">Alamat</td>
                             <td width="10px" valign="top">:</td>
-                            <td class="text-justify" width="10cm" valign="top">{{ $kelurahan->alamat_lurah }}
-                            </td>
+                            <td class="text-justify" width="10cm" valign="top">
+                                {{ $kelurahan->alamat_kepala_kelurahan }}</td>
                         </tr>
                     </tbody>
                 </table>
 
                 @php
-                    $data_kades = false;
+                    $data_lurah = false;
                 @endphp
             @endif
 
@@ -201,7 +200,7 @@
             <div style="margin-left: 50%; width: 50%" class="text-center float-right">
                 <p style="margin-bottom: 100px">
                     {{ $kelurahan->nama_kelurahan }}, {{ $tanggal }} <br>
-                    Kepala Kelurahan {{ $kelurahan->nama_kelurahan }}
+                    Kepala kelurahan {{ $kelurahan->nama_ }}
                 </p>
                 <p style="" class="bold underline">
                     {{ $kelurahan->nama_lurah }}

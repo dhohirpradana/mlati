@@ -11,6 +11,7 @@ use App\Penduduk;
 use App\StatusHubunganDalamKeluarga;
 use App\StatusPerkawinan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class PendudukController extends Controller
@@ -80,8 +81,16 @@ class PendudukController extends Controller
     public function store(PendudukRequest $request)
     {
         $data = $request->validated();
-        Penduduk::create($data);
-        return redirect()->route('penduduk.index')->with('success', 'Penduduk berhasil ditambahkan');
+        $nik = Penduduk::where('nik', $data['nik'])->first();
+        if ($nik) {
+            // return back()->with('warning', 'Data penduduk dengan NIK tersebut sudah ada!');
+            Session::flash('gagal', 'Data penduduk dengan NIK tersebut sudah ada!');
+            // return redirect('pesan');
+            return back()->withInput();
+        } else {
+            Penduduk::create($data);
+            return redirect()->route('penduduk.index')->with('success', 'Penduduk berhasil ditambahkan');
+        }
     }
 
     /**
