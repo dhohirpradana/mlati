@@ -1,7 +1,7 @@
 $(document).on("click", ".atas", function () {
-    $(this).tooltip('hide');
-    const before = $(this).parent('div').parent('div').parent('div').prev();
-    const current = $(this).parent('div').parent('div').parent('div');
+    $(this).tooltip("hide");
+    const before = $(this).parent("div").parent("div").parent("div").prev();
+    const current = $(this).parent("div").parent("div").parent("div");
     const dataBefore = $(before).html();
     const dataCurrent = $(current).html();
     $(current).html(dataBefore);
@@ -9,29 +9,29 @@ $(document).on("click", ".atas", function () {
 });
 
 $(document).on("click", ".bawah", function () {
-    $(this).tooltip('hide');
-    const after = $(this).parent('div').parent('div').parent('div').next();
-    const current = $(this).parent('div').parent('div').parent('div');
+    $(this).tooltip("hide");
+    const after = $(this).parent("div").parent("div").parent("div").next();
+    const current = $(this).parent("div").parent("div").parent("div");
     const dataAfter = $(after).html();
     const dataCurrent = $(current).html();
     $(current).html(dataAfter);
     $(after).html(dataCurrent);
 });
 
-$(document).on("change","input:checkbox", function (event) {
-    if ($(this).prop('checked')){
-        $(this).siblings('input[name="tampilkan[]"]').attr('value','1');
+$(document).on("change", "input:checkbox", function (event) {
+    if ($(this).prop("checked")) {
+        $(this).siblings('input[name="tampilkan[]"]').attr("value", "1");
     } else {
-        $(this).siblings('input[name="tampilkan[]"]').attr('value','0');
+        $(this).siblings('input[name="tampilkan[]"]').attr("value", "0");
     }
 });
 
 $(document).on("click", ".hapus", function () {
-    $(this).tooltip('dispose');
-    $(this).parent('div').parent('div').parent('div').remove();
+    $(this).tooltip("dispose");
+    $(this).parent("div").parent("div").parent("div").remove();
 });
 
-document.addEventListener("keyup", function(event) {
+document.addEventListener("keyup", function (event) {
     if (event.ctrlKey && event.altKey && event.which == 80) {
         $("#paragraf").click();
     }
@@ -49,29 +49,31 @@ document.addEventListener("keyup", function(event) {
     }
 });
 
-$('form').on('submit', function(event) {
+$("form").on("submit", function (event) {
     event.preventDefault();
-    const url = $(this).attr('action');
-    const redirect = $(this).data('redirect');
+    const url = $(this).attr("action");
+    const redirect = $(this).data("redirect");
     $.ajax({
         url: url,
-        type: 'POST',
+        type: "POST",
         data: new FormData(this),
-        dataType: 'json',
+        dataType: "json",
         contentType: false,
         cache: false,
         processData: false,
-        beforeSend: function(data){
-            $("#simpan").attr('disabled','disabled');
-            $("#simpan").html(`<img height="20px" src="${baseURL}/storage/loading.gif" alt=""> Loading ...`);
+        beforeSend: function (data) {
+            $("#simpan").attr("disabled", "disabled");
+            $("#simpan").html(
+                `<img height="20px" src="${baseURL}/storage/loading.gif" alt=""> Loading ...`
+            );
         },
-        success: function(result){
-            $("#simpan").html('SIMPAN');
-            $("#simpan").removeAttr('disabled');
+        success: function (result) {
+            $("#simpan").html("SIMPAN");
+            $("#simpan").removeAttr("disabled");
             if (result.success) {
                 alertSuccess(result.message);
                 setTimeout(() => {
-                    $(".notifikasi").html('');
+                    $(".notifikasi").html("");
                 }, 3000);
                 if (redirect) {
                     location.href = redirect;
@@ -79,18 +81,18 @@ $('form').on('submit', function(event) {
             } else {
                 alertError();
                 $.each(result.message, function (i, e) {
-                    $('#pesanError').append(`<li>`+e+`</li>`);
+                    $("#pesanError").append(`<li>` + e + `</li>`);
                 });
                 setTimeout(() => {
-                    $(".notifikasi").html('');
+                    $(".notifikasi").html("");
                 }, 10000);
             }
-        }
+        },
     });
 });
 
-$("#tampilkan_perihal").change(function(){
-    if ($(this).prop('checked') == true) {
+$("#tampilkan_perihal").change(function () {
+    if ($(this).prop("checked") == true) {
         $("#isian").prepend(`
             <div id="isian_perihal">
                 <div class="row">
@@ -136,15 +138,15 @@ $("#tampilkan_perihal").change(function(){
     }
 });
 
-$("#paragraf").click(function(){
-    $(this).tooltip('hide');
+$("#paragraf").click(function () {
+    $(this).tooltip("hide");
     let foc = $("#isian").append(`
         <div class="form-group">
             <label class="form-control-label">Paragraf</label> <a href="{{ url('img/bantuan-paragraf.png') }}" data-fancybox><i class="fas fa-question-circle text-blue" title="Bantuan" data-toggle="tooltip"></i></a>
             <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
                     <div class="input-group-text">
-                        <input type="checkbox" name="tampil[]" value="1" data-toggle="tooltip" title="Centang untuk menampilkan paragraf ini pada form buat surat">
+                        <input type="checkbox" name="tampil[]" value="1" data-toggle="tooltip" title="uk menampilkan paragraf ini pada form buat surat">
                         <input type="hidden" name="tampilkan[]" value="0">
                     </div>
                 </div>
@@ -159,11 +161,11 @@ $("#paragraf").click(function(){
         </div>
     `);
     $('[data-toggle="tooltip"]').tooltip();
-    $("#isian").find('.form-control').focus();
+    $("#isian").find(".form-control").focus();
 });
 
-$("#kalimat").click(function(){
-    $(this).tooltip('hide');
+$("#kalimat").click(function () {
+    $(this).tooltip("hide");
     $("#isian").append(`
         <div class="form-group">
             <label class="form-control-label">Kalimat</label> <a href="{{ url('img/bantuan-kalimat.png') }}" data-fancybox><i class="fas fa-question-circle text-blue" title="Bantuan" data-toggle="tooltip"></i></a>
@@ -185,11 +187,11 @@ $("#kalimat").click(function(){
         </div>
     `);
     $('[data-toggle="tooltip"]').tooltip();
-    $("#isian").find('.form-control').focus();
+    $("#isian").find(".form-control").focus();
 });
 
-$("#isi").click(function(){
-    $(this).tooltip('hide');
+$("#isi").click(function () {
+    $(this).tooltip("hide");
     $("#isian").append(`
         <div class="form-group">
             <label class="form-control-label">Isian</label>
@@ -206,11 +208,11 @@ $("#isi").click(function(){
         </div>
     `);
     $('[data-toggle="tooltip"]').tooltip();
-    $("#isian").find('.form-control').focus();
+    $("#isian").find(".form-control").focus();
 });
 
-$("#sub-judul").click(function(){
-    $(this).tooltip('hide');
+$("#sub-judul").click(function () {
+    $(this).tooltip("hide");
     $("#isian").append(`
         <div class="form-group">
             <label class="form-control-label">Sub Judul</label> <a href="{{ url('img/bantuan-subjudul.png') }}" data-fancybox><i class="fas fa-question-circle text-blue" title="Bantuan" data-toggle="tooltip"></i></a>
@@ -232,5 +234,5 @@ $("#sub-judul").click(function(){
         </div>
     `);
     $('[data-toggle="tooltip"]').tooltip();
-    $("#isian").find('.form-control').focus();
+    $("#isian").find(".form-control").focus();
 });

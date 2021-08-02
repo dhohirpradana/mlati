@@ -10,7 +10,7 @@
 
     <!-- CSS only -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        {{-- integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" --}}>
 
     <style>
         body {
@@ -160,6 +160,7 @@
             @endif
 
             @if ($isiSurat->jenis_isi == 3)
+                {{-- <div style="width: 50%" class="float-left"> --}}
                 @if ($tabel)
                     <table class="mb-3 ml-5">
                         <tbody>
@@ -173,6 +174,8 @@
                     <td width="10px" valign="top">:</td>
                     <td class="text-justify" width="10cm" valign="top">{{ $request->isian[$i] }}</td>
                 </tr>
+
+                {{-- </div> --}}
 
                 @php
                     $i++;

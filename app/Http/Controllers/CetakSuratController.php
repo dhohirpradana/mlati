@@ -106,7 +106,8 @@ class CetakSuratController extends Controller
     {
         $request->validate([
             'nomor'     => ['nullable', 'numeric', 'min:1'],
-            'isian.*'   => ['required']
+            'isian.*'   => ['required'],
+            // 'kalimat' => ['required']
         ]);
 
         $cetakSurat->update(['nomor' => $request->nomor]);

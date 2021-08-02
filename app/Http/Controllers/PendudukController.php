@@ -83,9 +83,7 @@ class PendudukController extends Controller
         $data = $request->validated();
         $nik = Penduduk::where('nik', $data['nik'])->first();
         if ($nik) {
-            // return back()->with('warning', 'Data penduduk dengan NIK tersebut sudah ada!');
             Session::flash('gagal', 'Data penduduk dengan NIK tersebut sudah ada!');
-            // return redirect('pesan');
             return back()->withInput();
         } else {
             Penduduk::create($data);

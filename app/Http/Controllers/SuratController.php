@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\CetakSurat;
 use App\Desa;
 use App\IsiSurat;
+use App\Kelurahan;
 use App\Surat;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class SuratController extends Controller
 {
@@ -30,8 +32,8 @@ class SuratController extends Controller
     public function layanan_surat()
     {
         $surat = Surat::latest()->get();
-        $desa = Desa::find(1);
-        return view('surat.layanan-surat', compact('surat','desa'));
+        $desa = Kelurahan::find(1);
+        return view('surat.layanan-surat', compact('surat', 'desa'));
     }
 
     /**
@@ -52,6 +54,27 @@ class SuratController extends Controller
      */
     public function store(Request $request)
     {
+        if ($request['perihal'] == 1) {
+            $validator = $this->validationSuratWithPerihal($request);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => $validator->errors()->all()
+                ]);
+            }
+
+            $dataSurat = $this->dataSurat($request);
+
+            $surat = Surat::create($dataSurat);
+
+            $this->createIsiSurat($request, $surat);
+
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Surat berhasil ditambahkan'
+            ]);
+        }
         $validator = $this->validationSurat($request);
 
         if ($validator->fails()) {
@@ -81,17 +104,17 @@ class SuratController extends Controller
      */
     public function show(Request $request, Surat $surat)
     {
-        $cetakSurat = CetakSurat::where('surat_id',$surat->id)->orderBy('id', 'desc')->paginate(25);
+        $cetakSurat = CetakSurat::where('surat_id', $surat->id)->orderBy('id', 'desc')->paginate(25);
         if ($request->cari) {
-            $cetakSurat = CetakSurat::where('surat_id',$surat->id)
-            ->whereHas('detailCetak', function ($detailCetak) use ($request) {
-                $detailCetak->where("isian", "like", "%{$request->cari}%");
-            })
-            ->orderBy('id', 'desc')->paginate(25);
+            $cetakSurat = CetakSurat::where('surat_id', $surat->id)
+                ->whereHas('detailCetak', function ($detailCetak) use ($request) {
+                    $detailCetak->where("isian", "like", "%{$request->cari}%");
+                })
+                ->orderBy('id', 'desc')->paginate(25);
         }
         $cetakSurat->appends($request->only('cari'));
 
-        return view('surat.show', compact('surat','cetakSurat'));
+        return view('surat.show', compact('surat', 'cetakSurat'));
     }
 
     /**
@@ -114,27 +137,51 @@ class SuratController extends Controller
      */
     public function update(Request $request, Surat $surat)
     {
-        $validator = $this->validationSurat($request);
+        if ($request['perihal'] == 1) {
+            $validator = $this->validationSuratWithPerihal($request);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => $validator->errors()->all()
+                ]);
+            }
+
+            $dataSurat = $this->dataSurat($request);
+            $surat->update($dataSurat);
+
+            IsiSurat::where('surat_id', $surat->id)->delete();
+
+            $this->createIsiSurat($request, $surat);
+
             return response()->json([
-                'success'   => false,
-                'message'   => $validator->errors()->all()
+                'success'   => true,
+                'message'   => 'Surat berhasil diperbarui'
+            ]);
+        } else {
+
+            $validator = $this->validationSurat($request);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success'   => false,
+                    'message'   => $validator->errors()->all()
+                ]);
+            }
+
+            $dataSurat = $this->dataSurat($request);
+
+            $surat->update($dataSurat);
+
+            IsiSurat::where('surat_id', $surat->id)->delete();
+
+            $this->createIsiSurat($request, $surat);
+
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Surat berhasil diperbarui'
             ]);
         }
-
-        $dataSurat = $this->dataSurat($request);
-
-        $surat->update($dataSurat);
-
-        IsiSurat::where('surat_id',$surat->id)->delete();
-
-        $this->createIsiSurat($request, $surat);
-
-        return response()->json([
-            'success'   => true,
-            'message'   => 'Surat berhasil diperbarui'
-        ]);
     }
 
     /**
@@ -152,9 +199,9 @@ class SuratController extends Controller
     public function chartSurat(Request $request, $id)
     {
         if ($request->tahun) {
-            $cetakSurat = CetakSurat::where('surat_id',$id)->whereYear('created_at',$request->tahun)->get();
+            $cetakSurat = CetakSurat::where('surat_id', $id)->whereYear('created_at', $request->tahun)->get();
         } else {
-            $cetakSurat = CetakSurat::where('surat_id',$id)->get();
+            $cetakSurat = CetakSurat::where('surat_id', $id)->get();
         }
 
         $arr = array(
@@ -205,7 +252,7 @@ class SuratController extends Controller
             "datasets" => [[
                 "label" => "Total Cetak Surat",
                 "data" => array_values($arr),
-                "backgroundColor" => 'rgb(' . rand(0,255) . ',' . rand(0,255) . ',' . rand(0,255) . ')',
+                "backgroundColor" => 'rgb(' . rand(0, 255) . ',' . rand(0, 255) . ',' . rand(0, 255) . ')',
             ]],
         ]);
     }
@@ -243,7 +290,24 @@ class SuratController extends Controller
         return Validator::make($request->all(), [
             'nama'      => ['required', 'max:64'],
             'icon'      => ['required', 'max:64'],
+            'perihal' => ['required'],
+            'isian'    => ["required", "array", "min:2"],
             'isian.*'   => ['required']
+        ], [
+            'isian.min' => 'Harus ada kolom isian dan kalimat/ paragraf!'
+        ]);
+    }
+
+    public function validationSuratWithPerihal($request)
+    {
+        return Validator::make($request->all(), [
+            'nama'      => ['required', 'max:64'],
+            'icon'      => ['required', 'max:64'],
+            'perihal' => ['required'],
+            'isian'    => ["required", "array", "min:8"],
+            'isian.*'   => ['required']
+        ], [
+            'isian.min' => 'Harus ada kolom isian dan kalimat/ paragraf!'
         ]);
     }
 }
