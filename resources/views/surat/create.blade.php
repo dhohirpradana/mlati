@@ -70,7 +70,7 @@
                                         <input class="form-control form-control-alternative" name="nama">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div style="display:none" class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Icon</label>
                                         @include('layouts.components.icon')
@@ -115,7 +115,7 @@
                                 <input type="hidden" name="data_kades" id="data_kades" value="0">
                                 <label class="custom-control-label" for="tampilkan_data_kades">Data Lurah</label> <a
                                     href="{{ url('img/bantuan-data-kades.png') }}" data-fancybox
-                                    data-caption="Akan menampilkan data kepala desa"><i
+                                    data-caption="Akan menampilkan data kepala kelurahan"><i
                                         class="fas fa-question-circle text-blue" title="Bantuan"
                                         data-toggle="tooltip"></i></a>
                             </div>

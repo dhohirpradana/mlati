@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Desa;
+use App\Kelurahan;
 use App\Surat;
 use Barryvdh\DomPDF\Facade as PDF;
 use Intervention\Image\Facades\Image;
@@ -22,14 +22,13 @@ class CetakSuratController extends Controller
     public function create(Request $request, $id, $slug)
     {
         $surat = Surat::find($id);
-        $desa = Desa::find(1);
+        $kelurahan = Kelurahan::find(1);
         if ($slug != Str::slug($surat->nama)) {
             return abort(404, 'Halaman Tidak Ditemukan');
         }
 
-        return view('cetak-surat.create', compact('surat','desa'));
+        return view('cetak-surat.create', compact('surat', 'kelurahan'));
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -40,24 +39,29 @@ class CetakSuratController extends Controller
     public function store(Request $request, $id)
     {
         $request->validate([
-            'isian.*'  => ['required']
+            'isian.*' => ['required'],
         ]);
 
-        $desa = Desa::find(1);
+        $kelurahan = Kelurahan::find(1);
         $surat = Surat::find($id);
-        $image = (string) Image::make(public_path(Storage::url($desa->logo)))->encode('jpg');
+        $image = (string) Image::make(
+            public_path(Storage::url($kelurahan->logo))
+        )->encode('jpg');
         $logo = (string) Image::make($image)->encode('data-url');
         $tanggal = tgl(date('Y-m-d'));
-        $pdf = PDF::loadView('cetak-surat.show', compact('surat', 'desa', 'request', 'logo', 'tanggal'))->setPaper(array(0,0,609.449,935.433));
+        $pdf = PDF::loadView(
+            'cetak-surat.show',
+            compact('surat', 'kelurahan', 'request', 'logo', 'tanggal')
+        )->setPaper([0, 0, 609.449, 935.433]);
         if ($surat->tampilkan == 1) {
             $cetakSurat = CetakSurat::create([
-                'surat_id' => $id
+                'surat_id' => $id,
             ]);
 
             foreach ($request->isian as $isian) {
                 DetailCetak::create([
-                    'cetak_surat_id'    => $cetakSurat->id,
-                    'isian'             => $isian
+                    'cetak_surat_id' => $cetakSurat->id,
+                    'isian' => $isian,
                 ]);
             }
 
@@ -86,12 +90,17 @@ class CetakSuratController extends Controller
      */
     public function show(CetakSurat $cetakSurat)
     {
-        $desa = Desa::find(1);
+        $kelurahan = Kelurahan::find(1);
         $surat = Surat::find($cetakSurat->surat_id);
-        $image = (string) Image::make(public_path(Storage::url($desa->logo)))->encode('jpg');
+        $image = (string) Image::make(
+            public_path(Storage::url($kelurahan->logo))
+        )->encode('jpg');
         $logo = (string) Image::make($image)->encode('data-url');
         $tanggal = tgl(date('Y-m-d', strtotime($cetakSurat->created_at)));
-        $pdf = PDF::loadView('cetak-surat.detail', compact('surat', 'desa', 'cetakSurat', 'logo', 'tanggal'))->setPaper(array(0,0,609.449,935.433));
+        $pdf = PDF::loadView(
+            'cetak-surat.detail',
+            compact('surat', 'kelurahan', 'cetakSurat', 'logo', 'tanggal')
+        )->setPaper([0, 0, 609.449, 935.433]);
         return $pdf->stream($surat->nama . '.pdf');
     }
 
@@ -105,8 +114,8 @@ class CetakSuratController extends Controller
     public function update(Request $request, CetakSurat $cetakSurat)
     {
         $request->validate([
-            'nomor'     => ['nullable','numeric','min:1'],
-            'isian.*'   => ['required']
+            'nomor' => ['nullable', 'numeric', 'min:1'],
+            'isian.*' => ['required'],
         ]);
 
         $cetakSurat->update(['nomor' => $request->nomor]);
@@ -115,12 +124,15 @@ class CetakSuratController extends Controller
 
         foreach ($request->isian as $isian) {
             DetailCetak::create([
-                'cetak_surat_id'    => $cetakSurat->id,
-                'isian'             => $isian
+                'cetak_surat_id' => $cetakSurat->id,
+                'isian' => $isian,
             ]);
         }
 
-        return back()->with('success','Detail cetak surat berhasil diperbarui');
+        return back()->with(
+            'success',
+            'Detail cetak surat berhasil diperbarui'
+        );
     }
 
     /**
@@ -132,6 +144,6 @@ class CetakSuratController extends Controller
     public function destroy(CetakSurat $cetakSurat)
     {
         $cetakSurat->delete();
-        return back()->with('success','Detail surat berhasil dihapus');
+        return back()->with('success', 'Detail surat berhasil dihapus');
     }
 }

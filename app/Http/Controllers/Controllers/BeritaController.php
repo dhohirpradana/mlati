@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Berita;
-use App\Desa;
+use App\Kelurahan;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
@@ -17,12 +17,13 @@ class BeritaController extends Controller
      */
     public function index(Request $request)
     {
-        $berita = Berita::orderBy('id','desc')->paginate(12);
+        $berita = Berita::orderBy('id', 'desc')->paginate(12);
 
         if ($request->cari) {
-            $berita = Berita::where('judul','like',"%{$request->cari}%")
-            ->orWhere('konten','like',"%{$request->cari}%")
-            ->orderBy('id','desc')->paginate(12);
+            $berita = Berita::where('judul', 'like', "%{$request->cari}%")
+                ->orWhere('konten', 'like', "%{$request->cari}%")
+                ->orderBy('id', 'desc')
+                ->paginate(12);
         }
 
         $berita->appends($request->only('cari'));
@@ -36,17 +37,18 @@ class BeritaController extends Controller
      */
     public function berita(Request $request)
     {
-        $berita = Berita::orderBy('id','desc')->paginate(12);
-        $desa = Desa::find(1);
+        $berita = Berita::orderBy('id', 'desc')->paginate(12);
+        $kelurahan = Kelurahan::find(1);
 
         if ($request->cari) {
-            $berita = Berita::where('judul','like',"%{$request->cari}%")
-            ->orWhere('konten','like',"%{$request->cari}%")
-            ->orderBy('id','desc')->paginate(12);
+            $berita = Berita::where('judul', 'like', "%{$request->cari}%")
+                ->orWhere('konten', 'like', "%{$request->cari}%")
+                ->orderBy('id', 'desc')
+                ->paginate(12);
         }
 
         $berita->appends($request->only('cari'));
-        return view('berita.berita', compact('berita','desa'));
+        return view('berita.berita', compact('berita', 'kelurahan'));
     }
 
     /**
@@ -68,9 +70,9 @@ class BeritaController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'judul'     => ['required','string','max:191'],
-            'konten'    => ['required'],
-            'gambar'    => ['nullable','image','max:2048'],
+            'judul' => ['required', 'string', 'max:191'],
+            'konten' => ['required'],
+            'gambar' => ['nullable', 'image', 'max:2048'],
         ]);
 
         if ($request->gambar) {
@@ -79,7 +81,9 @@ class BeritaController extends Controller
 
         Berita::create($data);
 
-        return redirect()->route('berita.index')->with('success','Berita berhasil ditambahkan');
+        return redirect()
+            ->route('berita.index')
+            ->with('success', 'Berita berhasil ditambahkan');
     }
 
     /**
@@ -90,13 +94,16 @@ class BeritaController extends Controller
      */
     public function show(Berita $berita, $slug)
     {
-        $desa = Desa::find(1);
-        $beritas = Berita::where('id','!=', $berita->id)->inRandomOrder()->limit(3)->get();
+        $kelurahan = Kelurahan::find(1);
+        $beritas = Berita::where('id', '!=', $berita->id)
+            ->inRandomOrder()
+            ->limit(3)
+            ->get();
         if ($slug != Str::slug($berita->judul)) {
             return abort(404);
         }
         $berita->update(['dilihat' => $berita->dilihat + 1]);
-        return view('berita.show', compact('berita','desa','beritas'));
+        return view('berita.show', compact('berita', 'kelurahan', 'beritas'));
     }
 
     /**
@@ -120,9 +127,9 @@ class BeritaController extends Controller
     public function update(Request $request, Berita $beritum)
     {
         $data = $request->validate([
-            'judul'     => ['required','string','max:191'],
-            'konten'    => ['required'],
-            'gambar'    => ['nullable','image','max:2048'],
+            'judul' => ['required', 'string', 'max:191'],
+            'konten' => ['required'],
+            'gambar' => ['nullable', 'image', 'max:2048'],
         ]);
 
         if ($request->gambar) {
@@ -134,7 +141,7 @@ class BeritaController extends Controller
 
         $beritum->update($data);
 
-        return back()->with('success','Berita berhasil diperbarui');
+        return back()->with('success', 'Berita berhasil diperbarui');
     }
 
     /**
@@ -146,6 +153,6 @@ class BeritaController extends Controller
     public function destroy(Berita $beritum)
     {
         $beritum->delete();
-        return back()->with('success','Berita berhasil dihapus');
+        return back()->with('success', 'Berita berhasil dihapus');
     }
 }

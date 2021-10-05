@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Desa;
+use App\Kelurahan;
 use App\Gallery;
 use App\Video;
 use Illuminate\Http\Request;
@@ -17,38 +17,38 @@ class GalleryController extends Controller
      */
     public function index()
     {
-        $desa = Desa::find(1);
+        $kelurahan = Kelurahan::find(1);
         $gallery = Gallery::where('slider', null)->get();
         $videos = Video::all();
-        $galleries = array();
+        $galleries = [];
 
         foreach ($gallery as $key => $value) {
             $gambar = [
-                'gambar'    => $value->gallery,
-                'id'        => $value->id,
-                'caption'   => $value->caption,
-                'jenis'     => 1,
-                'created_at'=> strtotime($value->created_at),
+                'gambar' => $value->gallery,
+                'id' => $value->id,
+                'caption' => $value->caption,
+                'jenis' => 1,
+                'created_at' => strtotime($value->created_at),
             ];
             array_push($galleries, $gambar);
         }
 
         foreach ($videos as $key => $value) {
             $gambar = [
-                'gambar'    => $value->gambar,
-                'id'        => $value->video_id,
-                'caption'   => $value->caption,
-                'jenis'     => 2,
-                'created_at'=> strtotime($value->published_at),
+                'gambar' => $value->gambar,
+                'id' => $value->video_id,
+                'caption' => $value->caption,
+                'jenis' => 2,
+                'created_at' => strtotime($value->published_at),
             ];
             array_push($galleries, $gambar);
         }
 
-        usort($galleries, function($a, $b) {
+        usort($galleries, function ($a, $b) {
             return $a['created_at'] < $b['created_at'];
         });
 
-        return view('gallery.index', compact('galleries','desa'));
+        return view('gallery.index', compact('galleries', 'kelurahan'));
     }
 
     /**
@@ -58,38 +58,38 @@ class GalleryController extends Controller
      */
     public function gallery()
     {
-        $desa = Desa::find(1);
+        $kelurahan = Kelurahan::find(1);
         $gallery = Gallery::where('slider', null)->get();
         $videos = Video::all();
-        $galleries = array();
+        $galleries = [];
 
         foreach ($gallery as $key => $value) {
             $gambar = [
-                'gambar'    => $value->gallery,
-                'id'        => $value->id,
-                'caption'   => $value->caption,
-                'jenis'     => 1,
-                'created_at'=> strtotime($value->created_at),
+                'gambar' => $value->gallery,
+                'id' => $value->id,
+                'caption' => $value->caption,
+                'jenis' => 1,
+                'created_at' => strtotime($value->created_at),
             ];
             array_push($galleries, $gambar);
         }
 
         foreach ($videos as $key => $value) {
             $gambar = [
-                'gambar'    => $value->gambar,
-                'id'        => $value->video_id,
-                'caption'   => $value->caption,
-                'jenis'     => 2,
-                'created_at'=> strtotime($value->published_at),
+                'gambar' => $value->gambar,
+                'id' => $value->video_id,
+                'caption' => $value->caption,
+                'jenis' => 2,
+                'created_at' => strtotime($value->published_at),
             ];
             array_push($galleries, $gambar);
         }
 
-        usort($galleries, function($a, $b) {
+        usort($galleries, function ($a, $b) {
             return $a['created_at'] < $b['created_at'];
         });
 
-        return view('gallery.gallery', compact('galleries','desa'));
+        return view('gallery.gallery', compact('galleries', 'kelurahan'));
     }
 
     /**
@@ -99,7 +99,9 @@ class GalleryController extends Controller
      */
     public function indexSlider()
     {
-        $gallery = Gallery::where('slider', 1)->latest()->get();
+        $gallery = Gallery::where('slider', 1)
+            ->latest()
+            ->get();
         return view('gallery.slider', compact('gallery'));
     }
 
@@ -122,17 +124,19 @@ class GalleryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'gambar'    => ['required', 'image', 'max:2048'],
-            'caption'   => ['nullable', 'string']
+            'gambar' => ['required', 'image', 'max:2048'],
+            'caption' => ['nullable', 'string'],
         ]);
 
         Gallery::create([
-            'gallery'   => $request->gambar->store('public/gallery'),
-            'caption'   => $request->caption,
-            'slider'    => $request->slider
+            'gallery' => $request->gambar->store('public/gallery'),
+            'caption' => $request->caption,
+            'slider' => $request->slider,
         ]);
 
-        return redirect()->back()->with('success', 'Gambar berhasil ditambahkan');
+        return redirect()
+            ->back()
+            ->with('success', 'Gambar berhasil ditambahkan');
     }
 
     /**
@@ -143,7 +147,7 @@ class GalleryController extends Controller
      */
     public function destroy(Gallery $gallery)
     {
-        File::delete(storage_path('app/'.$gallery->gallery));
+        File::delete(storage_path('app/' . $gallery->gallery));
         $gallery->delete();
         return back()->with('success', 'Gambar berhasil dihapus');
     }

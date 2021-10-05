@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddChannelIdToDesaTable extends Migration
+class AddChannelIdToKelurahanTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,14 @@ class AddChannelIdToDesaTable extends Migration
     public function up()
     {
         Schema::table('kelurahan', function (Blueprint $table) {
-            $table->string('channel_id', 64)->nullable()->after('logo');
-            $table->string('api_key', 128)->nullable()->after('channel_id');
+            $table
+                ->string('channel_id', 64)
+                ->nullable()
+                ->after('logo');
+            $table
+                ->string('api_key', 128)
+                ->nullable()
+                ->after('channel_id');
         });
     }
 

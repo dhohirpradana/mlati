@@ -96,31 +96,37 @@ $kelurahan = App\Kelurahan::find(1);
                                 <i class="fas fa-bars"></i> <span class="nav-link-inner--text">Menu</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right py-0 overflow-hidden">
-                                <a class="dropdown-item @if (Request::segment(1)=='layanan-surat'
-                                    ) active @endif" href="{{ route('layanan-surat') }}">
+                                <a class="dropdown-item @if (Request::segment(1) == 'layanan-surat') active @endif"
+                                    href="{{ route('layanan-surat') }}">
                                     <i class="fas fa-fw fa-file-alt text-yellow"></i>
                                     <span class="nav-link-inner--text">Layanan Surat</span>
                                 </a>
-                                <a class="dropdown-item @if (Request::segment(1)=='pemerintahan-kelurahan' ) active @endif" href="{{ route('pemerintahan-kelurahan') }}">
+                                <a class="dropdown-item @if (Request::segment(1) == 'pemerintahan-kelurahan') active @endif"
+                                    href="{{ route('pemerintahan-kelurahan') }}">
                                     <i class="fas fa-fw fa-atlas text-success"></i>
                                     <span class="nav-link-inner--text">Informasi Kelurahan</span>
                                 </a>
-                                <a class="dropdown-item @if (Request::segment(1)=='berita' ) active @endif" href="{{ route('berita') }}">
+                                <a class="dropdown-item @if (Request::segment(1) == 'berita') active @endif" href="{{ route('berita') }}">
                                     <i class="fas fa-fw fa-newspaper text-cyan"></i>
                                     <span class="nav-link-inner--text">Berita</span>
                                 </a>
-                                <a class="dropdown-item @if (Request::segment(1)=='gallery' ) active @endif" href="{{ route('gallery') }}">
+                                <a class="dropdown-item @if (Request::segment(1) == 'gallery') active @endif" href="{{ route('gallery') }}">
                                     <i class="fas fa-fw fa-images text-orange"></i>
                                     <span class="nav-link-inner--text">Gallery</span>
                                 </a>
-                                <a class="dropdown-item @if (Request::segment(1)=='statistik-penduduk' ) active @endif" href="{{ route('statistik-penduduk') }}">
+                                <a class="dropdown-item @if (Request::segment(1) == 'statistik-penduduk') active @endif"
+                                    href="{{ route('statistik-penduduk') }}">
                                     <i class="fas fa-fw fa-chart-pie text-info"></i>
                                     <span class="nav-link-inner--text">Statistik Penduduk</span>
                                 </a>
-                                <a class="dropdown-item @if (Request::segment(1)=='laporan-apbdes'
-                                    ) active @endif" href="{{ route('laporan-apbdes') }}">
+                                <a class="dropdown-item @if (Request::segment(1) == 'laporan-apbdes') active @endif"
+                                    href="{{ route('laporan-apbdes') }}">
                                     <i class="fas fa-fw fa-money-check-alt text-success"></i>
                                     <span class="nav-link-inner--text">Laporan APBD</span>
+                                </a>
+                                <a class="dropdown-item @if (Request::segment(1) == 'masuk') active @endif" href="{{ route('masuk') }}">
+                                    <i class="fas fa-fw fa-sign-in-alt text-success"></i>
+                                    <span class="nav-link-inner--text">Masuk</span>
                                 </a>
                             </div>
                         </li>

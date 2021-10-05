@@ -98,8 +98,8 @@ class PekerjaanSeeder extends Seeder
         Pekerjaan::create(['nama' => 'PIALANG']);
         Pekerjaan::create(['nama' => 'PARANORMAL']);
         Pekerjaan::create(['nama' => 'PEDAGANG']);
-        Pekerjaan::create(['nama' => 'PERANGKAT DESA']);
-        Pekerjaan::create(['nama' => 'KEPALA DESA']);
+        Pekerjaan::create(['nama' => 'PERANGKAT KELURAHAN']);
+        Pekerjaan::create(['nama' => 'KEPALA KELURAHAN']);
         Pekerjaan::create(['nama' => 'BIARAWATI']);
         Pekerjaan::create(['nama' => 'WIRASWASTA']);
         Pekerjaan::create(['nama' => 'LAINNYA']);

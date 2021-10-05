@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Agama;
 use App\Darah;
-use App\Desa;
+use App\Kelurahan;
 use App\Pekerjaan;
 use App\Pendidikan;
 use App\Penduduk;
@@ -15,32 +15,32 @@ class GrafikController extends Controller
 {
     public function index()
     {
-        $desa = Desa::find(1);
-        return view('statistik-penduduk.index',compact('desa'));
+        $kelurahan = Kelurahan::find(1);
+        return view('statistik-penduduk.index', compact('kelurahan'));
     }
 
     public function show()
     {
         return response()->json([
             'totalPenduduk' => Penduduk::count(),
-            'pekerjaan'     => $this->grafikPekerjaan(),
-            'pendidikan'    => $this->grafikPendidikan(),
-            'perkawinan'    => $this->grafikPerkawinan(),
-            'agama'         => $this->grafikAgama(),
-            'darah'         => $this->grafikDarah(),
-            'usia'          => $this->grafikUsia(),
+            'pekerjaan' => $this->grafikPekerjaan(),
+            'pendidikan' => $this->grafikPendidikan(),
+            'perkawinan' => $this->grafikPerkawinan(),
+            'agama' => $this->grafikAgama(),
+            'darah' => $this->grafikDarah(),
+            'usia' => $this->grafikUsia(),
         ]);
     }
 
     private function grafikPekerjaan()
     {
-        $data = array();
+        $data = [];
         $pekerjaan = Pekerjaan::all();
 
         foreach ($pekerjaan as $item) {
             $data[] = [
                 'name' => $item->nama,
-                'y' => Penduduk::wherePekerjaanId($item->id)->count()
+                'y' => Penduduk::wherePekerjaanId($item->id)->count(),
             ];
         }
         return $data;
@@ -48,13 +48,13 @@ class GrafikController extends Controller
 
     private function grafikPendidikan()
     {
-        $data = array();
+        $data = [];
         $pendidikan = Pendidikan::all();
 
         foreach ($pendidikan as $item) {
             $data[] = [
                 'name' => $item->nama,
-                'y' => Penduduk::wherePendidikanId($item->id)->count()
+                'y' => Penduduk::wherePendidikanId($item->id)->count(),
             ];
         }
         return $data;
@@ -62,13 +62,13 @@ class GrafikController extends Controller
 
     private function grafikAgama()
     {
-        $data = array();
+        $data = [];
         $agama = Agama::all();
 
         foreach ($agama as $item) {
             $data[] = [
                 'name' => $item->nama,
-                'y' => Penduduk::whereAgamaId($item->id)->count()
+                'y' => Penduduk::whereAgamaId($item->id)->count(),
             ];
         }
 
@@ -77,12 +77,28 @@ class GrafikController extends Controller
 
     private function grafikUsia()
     {
-        $kategori = ['0 - 4 tahun','5 - 17 tahun','18 - 30 tahun','31 - 60 tahun','60+ tahun'];
-        $laki0 = 0; $laki1 = 0; $laki2 = 0; $laki3 = 0; $laki4 = 0;
-        $perempuan0 = 0; $perempuan1 = 0; $perempuan2 = 0; $perempuan3 = 0; $perempuan4 = 0;
+        $kategori = [
+            '0 - 4 tahun',
+            '5 - 17 tahun',
+            '18 - 30 tahun',
+            '31 - 60 tahun',
+            '60+ tahun',
+        ];
+        $laki0 = 0;
+        $laki1 = 0;
+        $laki2 = 0;
+        $laki3 = 0;
+        $laki4 = 0;
+        $perempuan0 = 0;
+        $perempuan1 = 0;
+        $perempuan2 = 0;
+        $perempuan3 = 0;
+        $perempuan4 = 0;
 
-        foreach (Penduduk::where('jenis_kelamin',1)->get() as $penduduk) {
-            $laki = (int) Carbon::parse($penduduk->tanggal_lahir)->diff(Carbon::now())->format('%y');
+        foreach (Penduduk::where('jenis_kelamin', 1)->get() as $penduduk) {
+            $laki = (int) Carbon::parse($penduduk->tanggal_lahir)
+                ->diff(Carbon::now())
+                ->format('%y');
             if ($laki >= 0 && $laki <= 4) {
                 $laki0 += 1;
             } elseif ($laki >= 5 && $laki <= 17) {
@@ -96,8 +112,10 @@ class GrafikController extends Controller
             }
         }
 
-        foreach (Penduduk::where('jenis_kelamin',2)->get() as $penduduk) {
-            $perempuan = (int) Carbon::parse($penduduk->tanggal_lahir)->diff(Carbon::now())->format('%y');
+        foreach (Penduduk::where('jenis_kelamin', 2)->get() as $penduduk) {
+            $perempuan = (int) Carbon::parse($penduduk->tanggal_lahir)
+                ->diff(Carbon::now())
+                ->format('%y');
             if ($perempuan >= 0 && $perempuan <= 4) {
                 $perempuan0 += 1;
             } elseif ($perempuan >= 5 && $perempuan <= 17) {
@@ -112,21 +130,27 @@ class GrafikController extends Controller
         }
 
         return [
-            'kategori'          => $kategori,
-            'laki'              => [$laki0, $laki1, $laki2, $laki3, $laki4],
-            'perempuan'         => [$perempuan0, $perempuan1, $perempuan2, $perempuan3, $perempuan4],
+            'kategori' => $kategori,
+            'laki' => [$laki0, $laki1, $laki2, $laki3, $laki4],
+            'perempuan' => [
+                $perempuan0,
+                $perempuan1,
+                $perempuan2,
+                $perempuan3,
+                $perempuan4,
+            ],
         ];
     }
 
     private function grafikDarah()
     {
-        $data = array();
+        $data = [];
         $darah = Darah::all();
 
         foreach ($darah as $item) {
             $data[] = [
                 'name' => $item->golongan,
-                'y' => Penduduk::whereDarahId($item->id)->count()
+                'y' => Penduduk::whereDarahId($item->id)->count(),
             ];
         }
 
@@ -135,13 +159,13 @@ class GrafikController extends Controller
 
     private function grafikPerkawinan()
     {
-        $data = array();
+        $data = [];
         $perkawinan = StatusPerkawinan::all();
 
         foreach ($perkawinan as $item) {
             $data[] = [
                 'name' => $item->nama,
-                'y' => Penduduk::whereStatusPerkawinanId($item->id)->count()
+                'y' => Penduduk::whereStatusPerkawinanId($item->id)->count(),
             ];
         }
 
